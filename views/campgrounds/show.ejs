@@ -1,17 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show</title>
-</head>
-<body>
+<%- layout('layouts/boilerplate') %>
+
+<div class="col-6 offset-3">
+    <div class="card mb-3">
+        <img src="<%= camp.image %>" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title"><%= camp.title %></h5>
+          <p class="card-text"><%= camp.description %></p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item text-muted"><%= camp.location %></li>
+          <li class="list-group-item">&#8377;<%= camp.price %>/night</li>
+          
+        </ul>
+        <div class="card-body">
+          <a href="/campgrounds/<%= camp._id %>/edit" class="card-link btn btn-info">Edit</a>
+          <form class="d-inline" action="/campgrounds/<%= camp._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-danger">Delete</button>
+        </form>
+        </div>
+      </div>
+</div>
+
     
-    <h2>Show the Camp</h2>
+    <!-- <h2>Show the Camp</h2>
 
     <h3><%=camp.title%></h3>
     <h4><%=camp.location%></h4>
+    <img src="https://source.unsplash.com/collection/483251">
+    <p><%=camp.description%></p>
 
     <p>
         <a href="/campgrounds/<%= camp._id %>/edit">Edit</a>
@@ -22,10 +38,8 @@
             <button>Delete</button>
         </form>
         
-    </p>
+    </p> -->
 
     <footer>
         <a href="/campgrounds">Back to all campgrounds</a>
     </footer>
-</body>
-</html>
