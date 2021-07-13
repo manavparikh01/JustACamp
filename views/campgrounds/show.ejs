@@ -1,6 +1,7 @@
 <%- layout('layouts/boilerplate') %>
 
-<div class="col-6 offset-3">
+<div class="row">
+<div class="col-6">
     <div class="card mb-3">
         <img src="<%= camp.image %>" class="card-img-top" alt="...">
         <div class="card-body">
@@ -20,6 +21,35 @@
         </div>
       </div>
 </div>
+<div class="col-6">
+  <h3>Leave a review</h3>
+  <form action="/campgrounds/<%=camp._id%>/review" method="POST" class="mb-3 validate" novalidate>
+    <div class="mb-3">
+      <label for="rating" class="form-label">Rating</label>
+      <input type="range" class="form-range" id="rating" min="1" max="5" name="review[rating]" required>
+    </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">Review</label>
+        <textarea class="form-control" id="body" cols="50" rows="3" name="review[body]" required></textarea>
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+      </div>
+    <button class="btn btn-success">Submit</button>
+  </form>
+  <% for (let reviews of camp.reviews) { %>
+  <div class="mb-3 card">
+    <div class="card-body">
+      <h5 class="card-title">Rating: <%= reviews.rating %></h5>
+      <p class="card-text">Review: <%= reviews.body %></p>
+      <form action="/campgrounds/<%= camp._id %>/review/<%= reviews._id %>?_method=DELETE" method="POST">
+        <button class="btn btn-small btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+  <% } %>
+</div>
+</div> 
 
     
     <!-- <h2>Show the Camp</h2>
