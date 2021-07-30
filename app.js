@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+};
+
+//console.log(process.env.SECRET) 
+
 const express = require("express")
 const path = require("path")
 const mongoose = require("mongoose")
@@ -11,9 +17,13 @@ const methodOverride = require("method-override")
 const session = require('express-session')
 const flash = require('connect-flash')
 const { resolveSoa } = require("dns")
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user')
 //const review = require("./models/review")
 const campgrounds = require('./routes/campgrounds');
 const reviews = require('./routes/reviews');
+const userRoutes = require('./routes/users');
 mongoose.connect('mongodb://localhost:27017/yelp-camp', { 
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
@@ -49,12 +59,28 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash())
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
+    console.log(req.session);
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next()
 })
 
+app.get('/fakeUser', async (req, res, next) => {
+    const user = new User({email: 'manavfirsttime@gmail.com', username: 'manavparikh'});
+    const newUser = await User.register(user, 'manav');
+    res.send(newUser);
+})
+
+app.use('/', userRoutes);
 app.use('/campgrounds', campgrounds);
 app.use('/campgrounds/:id/review', reviews);
 
